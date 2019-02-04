@@ -183,6 +183,18 @@ class DAL
     }
 
 
+    /**
+     * @param $tableName
+     * @param $id
+     * @param $conn
+     * @return bool|string
+     */
+    public function deleteRow($tableName, $id, $conn){
+       $query = "DELETE FROM " .$tableName. "WHERE id = ".$id;
+       return (mysqli_query($query,$conn)) ? true : mysqli_error($conn);
+
+   }
+
 }
 
 
