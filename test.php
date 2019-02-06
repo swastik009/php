@@ -29,7 +29,7 @@ use AccessLayer\DAL;
         <label>decription </label>
         <input type="text" name="description">
         <label>Upload image</label>
-        <input type="file" name="image">
+        <input type="file" name="image" value="" >
 
         <input type="hidden" name="id">
 
@@ -38,16 +38,25 @@ use AccessLayer\DAL;
 
     <?php
 
+
+
+
         $db = new DAL();
         if(isset($_POST['submitButton'])){
             $db->data = $_POST;
             $db->button = 'submitButton';
-            $db->id = 'id';
+            $db->id = $_POST['id'];
             $db->tableName = 'test';
             $db->files = $_FILES;
             $db->fileHolder = "image";
             $db->imgPath = 'image/';
-            $db->Save();
+
+
+            if(empty($db->id)){
+                $db->Save();
+            }
+            else
+                $db->update();
         }
 
     ?>

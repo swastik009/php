@@ -1,6 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: Swastik
  * Date: 2/1/2019
  * Time: 12:40 PM
@@ -62,10 +61,8 @@ class DAL
     {
 
         $name='';
-        $tmpLocation = '';
         if(!empty($this->files)){
             $name = $this->imgNameChange($this->files[$this->fileHolder]['name']);
-            $tmpLocation = $this->files[$this->fileHolder]['tmp_name'];
             $this->data += [$this->fileHolder => $name];
         }
 
@@ -117,7 +114,7 @@ class DAL
 
             if (!empty($name)) {
                 $this->makeDir();
-                move_uploaded_file($tmpLocation, $this->imgPath . $name);
+                move_uploaded_file($this->files[$this->fileHolder]['tmp_name'], $this->imgPath . $name);
             }
             return true;
         }
@@ -139,17 +136,40 @@ class DAL
     }
 
 
-
+    /**
+     * @return bool|string
+     */
     public function update()
     {
+
         unset($this->data[$this->button]);
         $id = $this->data['id'];
         unset($this->data['id']);
+
+        $name = '';
+
+
+        if(!$this->files[$this->fileHolder]['error'] > 0){
+            $name = $this->imgNameChange($this->files[$this->fileHolder]['name']);
+            $imageName = mysqli_fetch_assoc($this->fetchSingle());
+            $this->data += [$this->fileHolder => $name];
+            $this->DeleteImg($imageName['image']);
+        }
+
         $ColName = array_keys($this->data);
         $ColValues = array_values($this->data);
-        $Query = $this->CleansedQueryForUpdate($ColName, $ColValues, $this->TableName, $id);
-        return (mysqli_query($this->conn, $Query)) ? true : mysqli_error($this->conn);
+        $Query = $this->CleansedQueryForUpdate($ColName, $ColValues, $id);
 
+        if(mysqli_query($this->conn, $Query)) {
+            if (!empty($name)) {
+                $this->makeDir();
+                move_uploaded_file($this->files[$this->fileHolder]['tmp_name'], $this->imgPath . $name);
+            }
+            return true;
+        }
+        else {
+            echo mysqli_error($this->conn);
+        }
     }
 
 
@@ -211,11 +231,13 @@ class DAL
 
 
 
-    public function deleteRow(){
+    public function Delete(){
        $query = "DELETE FROM " .$this->tableName. "WHERE id = ".$this->id;
        return (mysqli_query($query,$this->conn)) ? true : mysqli_error($this->conn);
 
    }
+
+
 
     /**
      * @return string
@@ -240,7 +262,12 @@ class DAL
        return (file_exists($this->imgPath.$imageName)) ? unlink($this->imgPath.$imageName) : false;
    }
 
-   public function makeDir(){
+
+
+    /**
+     * makes a new directory if directory doesn't exist
+     */
+    public function makeDir(){
         if(!file_exists($this->imgPath)){
             mkdir($this->imgPath,0777);
         }
