@@ -54,6 +54,7 @@ use AccessLayer\DAL;
 
             if(empty($db->id)){
                 $db->Save();
+
             }
             else
                 $db->update();
