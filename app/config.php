@@ -18,4 +18,8 @@ define("UserName", "root"  );
 define("Password", '' );
 define("DbName", "crudtest"  );
 define("URLROOT", "localhost/phpPrac/");
+
+/**
+ * APPROOT defines the path of app folder
+ */
 define("APPROOT", dirname(__FILE__));
