@@ -19,7 +19,7 @@ class Controller
 
     }
 
-    public function views($path){
+    public function views($path,$data = []){
         require APPROOT.'/Views/'.$path.'.php';
     }
 }
