@@ -6,7 +6,7 @@
  * Time: 10:37 PM
  */
 
-class pages
+class Pages
 {
     public function index(){
 

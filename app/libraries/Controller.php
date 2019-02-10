@@ -9,13 +9,13 @@
 class Controller
 {
 
-    /**
-     * All sub controller should extend this controller
-     */
+
+    protected $model = '';
+
+
     public function model(){
-        /**
-         * model accessor
-         */
+        require APPROOT.'/Models/'.$this->model.'.php';
+        $this->model = new $this->model();
 
     }
 

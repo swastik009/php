@@ -6,7 +6,7 @@
  * Time: 10:47 PM
  */
 
-class abc extends Controller
+class Abc extends Controller
 {
     public function index(){
         echo "hello abc index";
